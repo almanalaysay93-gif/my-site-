@@ -1,4 +1,5 @@
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
+import { asset } from '@/lib/asset';
 import DataRain from '@/components/ui/data-rain';
 import FlyScene, { PAGE_COUNT, type FlyHandle } from '@/components/FlyScene';
 import Deck from '@/components/Deck';
@@ -16,6 +17,18 @@ export default function App() {
     flyRef.current?.flyTo(i);
     if (progressRef.current) progressRef.current.style.transform = `scaleX(${i / (PAGE_COUNT - 1)})`;
   };
+
+  // On fast connections, fetch the next walkthroughs into the cache while the visitor is still on the hero.
+  useEffect(() => {
+    const conn = (navigator as Navigator & { connection?: { effectiveType?: string; saveData?: boolean } }).connection;
+    if (conn?.saveData || (conn?.effectiveType && conn.effectiveType !== '4g')) return;
+    const t = window.setTimeout(() => {
+      projects.filter((p) => p.walk).slice(0, 3).forEach((p) => {
+        fetch(asset(`/walk/${p.id}.mp4`)).then((r) => r.blob()).catch(() => undefined);
+      });
+    }, 4000);
+    return () => window.clearTimeout(t);
+  }, []);
 
   const pages = [
     <HeroPage key="hero" />,
