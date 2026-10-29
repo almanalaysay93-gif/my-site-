@@ -17,9 +17,9 @@ const PANEL_H = 9;
 const SHAPE_SCALE = PANEL_H / 2; // sample shapes are 2 units tall
 const SPACING = 18;
 
-const FLIGHT_MS = 1100;
+const FLIGHT_MS = SMALL_SCREEN ? 620 : 1100; // phones fly faster
 const HOLD_MS = 0; // no hold: the burst and the reveal start as the camera lands
-const REVEAL_MS = 600;
+const REVEAL_MS = SMALL_SCREEN ? 360 : 600;
 const VIDEO_OPACITY = 1; // full opacity: anything lower turns white sites grey
 
 // Wide aspect so the sampled image fills the full panel width.

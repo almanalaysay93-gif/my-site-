@@ -5,8 +5,8 @@ interface DeckProps {
   onIndex: (index: number) => void;
 }
 
-const SCROLL_MS = 450; // custom page scroll: faster and more decisive than the browser's smooth scroll
-const LEAVE_MS = 320; // how long the outgoing page keeps its leaving state
+const SCROLL_MS = window.matchMedia('(max-width: 768px)').matches ? 260 : 450; // custom page scroll: faster and more decisive than the browser's smooth scroll
+const LEAVE_MS = 200; // how long the outgoing page keeps its leaving state
 const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3);
 
 // Page-by-page deck. One wheel step, arrow key or Space moves exactly one page.

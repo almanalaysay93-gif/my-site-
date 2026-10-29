@@ -281,3 +281,19 @@
 @media (prefers-reduced-motion: reduce) {
   .glimpse { display: none; }
 }
+
+/* Phones: shorter, quicker text in and out, so the page feels immediate. */
+@media (max-width: 768px) {
+  [data-page] [data-anim] {
+    transition:
+      opacity 0.22s ease-out,
+      transform 0.26s ease-out,
+      filter 0.22s ease-out;
+  }
+  [data-page][data-active] [data-anim] {
+    transition-delay: calc(var(--i, 0) * 22ms);
+  }
+  [data-page][data-leaving] [data-anim] {
+    transition-duration: 0.16s;
+  }
+}
