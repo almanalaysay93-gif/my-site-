@@ -1,5 +1,6 @@
 import { useState, type CSSProperties, type FormEvent } from 'react';
 import ScrollCue from '@/components/ScrollCue';
+import { asset } from '@/lib/asset';
 import { projects, type Project } from '@/lib/projects';
 import { contact, downloadBlob, icsBlob, vCardBlob } from '@/lib/contact';
 
@@ -12,9 +13,12 @@ export function HeroPage() {
     <div className="flex h-full w-full items-end px-6 pb-32 sm:px-12 lg:items-center lg:pb-0 lg:pl-[8vw]">
       <div className="max-w-xl">
         <p {...anim(0)} className="mb-6 font-mono text-[11px] uppercase tracking-[0.32em] text-[#9aa7b8]">Full-stack developer · Davao City</p>
-        <h1 {...anim(1)} className="font-display text-[clamp(5rem,13vw,10.5rem)] leading-[0.82] tracking-[-0.02em] text-[#ece7dd]">
-          AL<span className="text-[#8fdcff]">.</span>
-        </h1>
+        <div {...anim(1)} className="flex items-end gap-5">
+          <h1 className="font-display text-[clamp(5rem,13vw,10.5rem)] leading-[0.82] tracking-[-0.02em] text-[#ece7dd]">
+            AL<span className="text-[#8fdcff]">.</span>
+          </h1>
+          <img src={asset('/me.png')} alt="AL, developer" className="mb-2 h-[clamp(4rem,8vw,6.5rem)] w-[clamp(4rem,8vw,6.5rem)] shrink-0 rounded-full border border-white/15 object-cover object-top shadow-[0_0_40px_rgba(143,220,255,0.18)]" />
+        </div>
         <p {...anim(2)} className="mt-6 max-w-md text-lg leading-relaxed text-[#aab4c3]">
           I build complete full-stack applications with AI tools in the workflow. Cleaner architecture, faster problem solving,
           higher quality products.
