@@ -577,6 +577,29 @@ const FlyScene = forwardRef<FlyHandle, { className?: string }>(function FlyScene
     if (!reduced) document.documentElement.addEventListener('pointerleave', onPointerOut);
     if (!reduced) window.addEventListener('pointermove', onPointer, { passive: true });
 
+    // Touch: browsers stop sending pointer events once a swipe becomes a scroll, so the finger is
+    // followed with touch events instead. The rain, the video bulge and the tilt all follow the finger.
+    let touchEndTimer = 0;
+    const onTouch = (e: TouchEvent) => {
+      const t = e.touches[0];
+      if (!t) return;
+      window.clearTimeout(touchEndTimer);
+      px = t.clientX / window.innerWidth - 0.5;
+      py = t.clientY / window.innerHeight - 0.5;
+      pointerOn = true;
+    };
+    const onTouchEnd = () => {
+      // Let the effect ease back to rest after the finger lifts, rather than snapping.
+      window.clearTimeout(touchEndTimer);
+      touchEndTimer = window.setTimeout(() => { pointerOn = false; }, 500);
+    };
+    if (!reduced) {
+      window.addEventListener('touchstart', onTouch, { passive: true });
+      window.addEventListener('touchmove', onTouch, { passive: true });
+      window.addEventListener('touchend', onTouchEnd, { passive: true });
+      window.addEventListener('touchcancel', onTouchEnd, { passive: true });
+    }
+
     const resize = () => {
       const r = host.getBoundingClientRect();
       const w = Math.max(1, r.width);
@@ -748,6 +771,11 @@ const FlyScene = forwardRef<FlyHandle, { className?: string }>(function FlyScene
       cancelAnimationFrame(raf);
       window.clearTimeout(introTimer);
       window.removeEventListener('pointermove', onPointer);
+      window.removeEventListener('touchstart', onTouch);
+      window.removeEventListener('touchmove', onTouch);
+      window.removeEventListener('touchend', onTouchEnd);
+      window.removeEventListener('touchcancel', onTouchEnd);
+      window.clearTimeout(touchEndTimer);
       document.documentElement.removeEventListener('pointerleave', onPointerOut);
       ro.disconnect();
       flyRef.current = null;
