@@ -123,7 +123,7 @@ interface Panel {
   walk: boolean;
   src: string;
   video: HTMLVideoElement | null;
-  vtex: THREE.Texture | null;
+  vtex: THREE.VideoTexture | null;
 }
 
 interface Tween {
@@ -263,22 +263,16 @@ const FlyScene = forwardRef<FlyHandle, { className?: string }>(function FlyScene
         v.loop = true;
         v.playsInline = true;
         v.preload = 'auto';
-        // Upload a video frame to the GPU only when the video has a new one (about 30 a second),
-        // not on every screen frame. Falls back to three's VideoTexture when the browser lacks the callback.
-        let vtex: THREE.Texture;
-        if ('requestVideoFrameCallback' in v) {
-          vtex = new THREE.Texture(v);
-          vtex.minFilter = THREE.LinearFilter;
-          vtex.magFilter = THREE.LinearFilter;
-          vtex.generateMipmaps = false;
-          const onFrame = () => {
+        // VideoTexture uploads on every screen frame by default. Upload only when the video time has
+        // moved, so a 30 fps video is not re-uploaded on every 60 fps frame.
+        const vtex = new THREE.VideoTexture(v);
+        let lastT = -1;
+        vtex.update = () => {
+          if (v.readyState >= v.HAVE_CURRENT_DATA && v.currentTime !== lastT) {
+            lastT = v.currentTime;
             vtex.needsUpdate = true;
-            v.requestVideoFrameCallback(onFrame);
-          };
-          v.requestVideoFrameCallback(onFrame);
-        } else {
-          vtex = new THREE.VideoTexture(v);
-        }
+          }
+        };
         vtex.colorSpace = THREE.SRGBColorSpace;
         p.video = v;
         p.vtex = vtex;
