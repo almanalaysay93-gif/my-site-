@@ -264,3 +264,20 @@
     transition: opacity 0.2s !important;
   }
 }
+
+/* Intro glimpse: photo fades in, holds while particles gather, then fades out as they take its shape. */
+.glimpse {
+  animation: glimpse 3.1s ease-in-out both;
+}
+.glimpse img {
+  filter: grayscale(0.4) brightness(0.85);
+  box-shadow: 0 30px 80px rgba(143, 220, 255, 0.18);
+}
+@keyframes glimpse {
+  0%, 30% { opacity: 0; }
+  50%, 78% { opacity: 0.9; }
+  100% { opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .glimpse { display: none; }
+}
