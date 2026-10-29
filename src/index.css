@@ -297,3 +297,19 @@
     transition-duration: 0.16s;
   }
 }
+
+/* Phones: no live blur over moving layers. Each blur re-renders the animated scene behind it every frame. */
+@media (max-width: 768px), (pointer: coarse) {
+  [class*='backdrop-blur'] {
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+  }
+  nav[aria-label='Contact'],
+  header {
+    background-color: rgb(5 7 13 / 0.82) !important;
+  }
+  .dr-bloom,
+  .dr-grain {
+    display: none;
+  }
+}

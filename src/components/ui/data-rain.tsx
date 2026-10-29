@@ -661,8 +661,11 @@ export default function DataRain(props: DataRainProps) {
       }
 
       /* bloom: quarter-res copy, blurred by CSS */
-      bctx.clearRect(0, 0, bw, bh);
-      bctx.drawImage(main, 0, 0, bw, bh);
+      // Skip the copy when the bloom layer is hidden (phones): it is the most expensive step per frame.
+      if (bloom.offsetParent !== null || getComputedStyle(bloom).display !== "none") {
+        bctx.clearRect(0, 0, bw, bh);
+        bctx.drawImage(main, 0, 0, bw, bh);
+      }
     };
 
     /* ─────────────── lifecycle helpers ─────────────── */

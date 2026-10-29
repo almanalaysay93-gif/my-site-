@@ -123,7 +123,7 @@ interface Panel {
   walk: boolean;
   src: string;
   video: HTMLVideoElement | null;
-  vtex: THREE.VideoTexture | null;
+  vtex: THREE.Texture | null;
 }
 
 interface Tween {
@@ -145,8 +145,9 @@ const FlyScene = forwardRef<FlyHandle, { className?: string }>(function FlyScene
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const flightMs = reduced ? 1 : FLIGHT_MS;
 
-    const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true, powerPreference: 'high-performance' });
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    // Phones render at 1x pixel density with no anti-aliasing: a 3x screen would otherwise draw 9x the pixels.
+    const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: !SMALL_SCREEN, powerPreference: 'high-performance' });
+    renderer.setPixelRatio(SMALL_SCREEN ? 1 : Math.min(window.devicePixelRatio || 1, 2));
     renderer.setClearColor(0x000000, 0);
     host.appendChild(renderer.domElement);
 
@@ -262,7 +263,22 @@ const FlyScene = forwardRef<FlyHandle, { className?: string }>(function FlyScene
         v.loop = true;
         v.playsInline = true;
         v.preload = 'auto';
-        const vtex = new THREE.VideoTexture(v);
+        // Upload a video frame to the GPU only when the video has a new one (about 30 a second),
+        // not on every screen frame. Falls back to three's VideoTexture when the browser lacks the callback.
+        let vtex: THREE.Texture;
+        if ('requestVideoFrameCallback' in v) {
+          vtex = new THREE.Texture(v);
+          vtex.minFilter = THREE.LinearFilter;
+          vtex.magFilter = THREE.LinearFilter;
+          vtex.generateMipmaps = false;
+          const onFrame = () => {
+            vtex.needsUpdate = true;
+            v.requestVideoFrameCallback(onFrame);
+          };
+          v.requestVideoFrameCallback(onFrame);
+        } else {
+          vtex = new THREE.VideoTexture(v);
+        }
         vtex.colorSpace = THREE.SRGBColorSpace;
         p.video = v;
         p.vtex = vtex;

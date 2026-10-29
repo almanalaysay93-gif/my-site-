@@ -27,7 +27,7 @@ export default function App() {
 
   return (
     <>
-      <DataRain fullscreen count={SMALL_SCREEN ? 500 : undefined} />
+      <DataRain fullscreen count={SMALL_SCREEN ? 300 : undefined} />
       {/* Glimpse: the photo shows, then the particles gather into it (timed to the intro in FlyScene). */}
       <div aria-hidden="true" className="glimpse pointer-events-none fixed inset-0 z-[1] flex items-center justify-center md:justify-end md:pr-[10vw]">
         <img src={asset("/portrait.jpg")} alt="" className="w-[62vw] max-w-[320px] rounded-2xl object-cover md:w-[34vw] md:max-w-[420px]" />
