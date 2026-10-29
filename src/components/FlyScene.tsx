@@ -262,10 +262,6 @@ const FlyScene = forwardRef<FlyHandle, { className?: string }>(function FlyScene
         v.loop = true;
         v.playsInline = true;
         v.preload = 'auto';
-        // The recordings open on a blank page, so start after the page paints.
-        v.addEventListener('loadedmetadata', () => {
-          v.currentTime = Math.min(4, Math.max(0, v.duration - 1));
-        });
         const vtex = new THREE.VideoTexture(v);
         vtex.colorSpace = THREE.SRGBColorSpace;
         p.video = v;
