@@ -70,7 +70,7 @@ function AppTile({ tile }: { tile: Tile }) {
     <span
       data-tile
       aria-hidden="true"
-      className="relative flex h-8 w-8 min-w-0 max-w-full shrink items-center justify-center overflow-hidden rounded-[9px] transition-transform duration-200 ease-out [transform-style:preserve-3d] md:h-9 md:w-9 md:rounded-[10px]"
+      className="relative flex aspect-square h-8 w-8 shrink-0 items-center justify-center overflow-hidden rounded-[9px] transition-transform duration-200 ease-out [transform-style:preserve-3d] md:h-9 md:w-9 md:rounded-[10px]"
       style={{
         background: `linear-gradient(160deg, color-mix(in oklch, ${tile.bg} 82%, white) 0%, ${tile.bg} 45%, color-mix(in oklch, ${tile.bg} 78%, black) 100%)`,
         color: tile.fg,
