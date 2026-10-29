@@ -17,7 +17,7 @@ export function HeroPage() {
           <h1 className="font-display text-[clamp(5rem,13vw,10.5rem)] leading-[0.82] tracking-[-0.02em] text-[#ece7dd]">
             AL<span className="text-[#8fdcff]">.</span>
           </h1>
-          <img src={asset('/me.png')} alt="AL, developer" className="mb-2 h-[clamp(9rem,19vw,15rem)] w-[clamp(6.75rem,14.25vw,11.25rem)] shrink-0 rounded-2xl border border-white/15 object-cover object-top shadow-[0_0_50px_rgba(143,220,255,0.2)]" />
+          <img src={asset('/me.jpg')} alt="AL, developer" className="mb-2 h-[clamp(9rem,19vw,15rem)] w-[clamp(6.75rem,14.25vw,11.25rem)] shrink-0 rounded-2xl border border-white/15 object-cover object-top shadow-[0_0_50px_rgba(143,220,255,0.2)]" />
         </div>
         <p {...anim(2)} className="mt-6 max-w-md text-lg leading-relaxed text-[#aab4c3]">
           I build complete full-stack applications with AI tools in the workflow. Cleaner architecture, faster problem solving,

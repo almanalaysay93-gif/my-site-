@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useRef } from 'react';
 import { asset } from '@/lib/asset';
 import DataRain from '@/components/ui/data-rain';
 import FlyScene, { PAGE_COUNT, type FlyHandle } from '@/components/FlyScene';
@@ -18,18 +18,6 @@ export default function App() {
     if (progressRef.current) progressRef.current.style.transform = `scaleX(${i / (PAGE_COUNT - 1)})`;
   };
 
-  // On fast connections, fetch the first walkthrough while the visitor is on the hero. Only one, so it never competes with the video being watched.
-  useEffect(() => {
-    const conn = (navigator as Navigator & { connection?: { effectiveType?: string; saveData?: boolean } }).connection;
-    if (conn?.saveData || (conn?.effectiveType && conn.effectiveType !== '4g')) return;
-    const t = window.setTimeout(() => {
-      projects.filter((p) => p.walk).slice(0, 1).forEach((p) => {
-        fetch(asset(`/walk/${p.id}.mp4`)).then((r) => r.blob()).catch(() => undefined);
-      });
-    }, 4000);
-    return () => window.clearTimeout(t);
-  }, []);
-
   const pages = [
     <HeroPage key="hero" />,
     ...projects.map((p) => <ProjectCaption key={p.id} project={p} />),
@@ -42,7 +30,7 @@ export default function App() {
       <DataRain fullscreen count={SMALL_SCREEN ? 500 : undefined} />
       {/* Glimpse: the photo shows, then the particles gather into it (timed to the intro in FlyScene). */}
       <div aria-hidden="true" className="glimpse pointer-events-none fixed inset-0 z-[1] flex items-center justify-center md:justify-end md:pr-[10vw]">
-        <img src="/portrait.png" alt="" className="w-[62vw] max-w-[320px] rounded-2xl object-cover md:w-[34vw] md:max-w-[420px]" />
+        <img src={asset("/portrait.jpg")} alt="" className="w-[62vw] max-w-[320px] rounded-2xl object-cover md:w-[34vw] md:max-w-[420px]" />
       </div>
       <FlyScene ref={flyRef} className="pointer-events-none fixed inset-0 z-[1]" />
 

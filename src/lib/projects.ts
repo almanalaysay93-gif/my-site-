@@ -22,7 +22,7 @@ export const projects: Project[] = [
   { id: 'autosocial', title: 'AutoSocial', tagline: 'Marketplace for vehicles and rentals.', url: 'https://autosocial-marketplace.vercel.app/', walk: true, tags: ['Marketplace'] },
   { id: 'organ-donor', title: 'SHARE Organ Donor Sign-up', tagline: 'Donor pledge site with a digital donor card.', url: 'https://almanalaysay93-gif.github.io/organ-donor-signup/', walk: true, tags: ['Medical', 'Sign-up'] },
   { id: 'dink', title: 'Dink for the Roots', tagline: 'Pickleball fundraising tournament registration.', url: 'https://dinkfortheroots.redirectme.net/', walk: true, tags: ['Event', 'Registration'] },
-  { id: 'nurse-tracker', title: 'SKTI NurseTrack', tagline: 'Nurse database and staff credential tracker.', url: 'https://nodandnatracker.vercel.app/dashboard', walk: false, shot: '/shots/nurse-tracker.png', tags: ['Medical', 'Database'] },
-  { id: 'dialysis-occupancy', title: 'Dialysis Occupancy Board', tagline: 'Hemodialysis queue and occupancy board.', url: null, walk: false, shot: '/shots/nda-dialysis-occupancy.png', tags: ['Medical', 'Queue', 'NDA'] },
-  { id: 'dialysis-stock', title: 'Dialysis Stock Tracker', tagline: 'Dialysis supply stock tracking.', url: null, walk: false, shot: '/shots/nda-dialysis-stock.png', tags: ['Medical', 'NDA'] },
+  { id: 'nurse-tracker', title: 'SKTI NurseTrack', tagline: 'Nurse database and staff credential tracker.', url: 'https://nodandnatracker.vercel.app/dashboard', walk: false, shot: '/shots/nurse-tracker.jpg', tags: ['Medical', 'Database'] },
+  { id: 'dialysis-occupancy', title: 'Dialysis Occupancy Board', tagline: 'Hemodialysis queue and occupancy board.', url: null, walk: false, shot: '/shots/nda-dialysis-occupancy.jpg', tags: ['Medical', 'Queue', 'NDA'] },
+  { id: 'dialysis-stock', title: 'Dialysis Stock Tracker', tagline: 'Dialysis supply stock tracking.', url: null, walk: false, shot: '/shots/nda-dialysis-stock.jpg', tags: ['Medical', 'NDA'] },
 ];

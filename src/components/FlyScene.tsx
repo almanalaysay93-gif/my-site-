@@ -39,7 +39,7 @@ function shapeFor(k: number): Promise<Shape> {
   let p = shapeCache.get(k);
   if (p) return p;
   if (k === 0) {
-    p = sampleImage(asset('/portrait.png'), SHAPE_LAYOUT, { minLum: 42, zScale: 0.35 });
+    p = sampleImage(asset('/portrait.jpg'), SHAPE_LAYOUT, { minLum: 42, zScale: 0.35 });
   } else if (k <= N) {
     const proj = projects[k - 1];
     p = proj.walk
@@ -552,7 +552,6 @@ const FlyScene = forwardRef<FlyHandle, { className?: string }>(function FlyScene
       }, flightMs + HOLD_MS);
     };
     flyRef.current = fly;
-    for (let k = 0; k < PAGE_COUNT; k++) shapeFor(k).catch(() => undefined);
 
     /* ── pointer parallax ── */
     let px = 0;
@@ -621,6 +620,10 @@ const FlyScene = forwardRef<FlyHandle, { className?: string }>(function FlyScene
       shapeFor(0).then((shape) => {
         if (active === 0) morphTo(shape, heroCentre(), 0.6, heroScale());
       });
+      // After the intro: start loading the first walkthrough in its own player (one download, ready on the first swipe),
+      // then prepare the other page images for the scroll-out effect.
+      ensureVideo(1);
+      for (let k = 0; k < PAGE_COUNT; k++) shapeFor(k).catch(() => undefined);
     }, 2200);
 
     /* ── render loop ── */
