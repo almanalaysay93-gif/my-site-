@@ -2,7 +2,7 @@ import { forwardRef, useEffect, useImperativeHandle, useRef } from 'react';
 import * as THREE from 'three';
 import { projects } from '@/lib/projects';
 import { asset } from '@/lib/asset';
-import { PARTICLE_COUNT, sampleImage, sampleText, type Layout, type Shape } from '@/lib/sample';
+import { PARTICLE_COUNT, SMALL_SCREEN, sampleImage, sampleText, type Layout, type Shape } from '@/lib/sample';
 
 export interface FlyHandle {
   flyTo: (page: number) => void;
@@ -177,7 +177,7 @@ const FlyScene = forwardRef<FlyHandle, { className?: string }>(function FlyScene
     const heroScale = () => (camera.aspect > 1.1 ? 1 : (0.18 * 2 * viewDistance() * tanHalf) / PANEL_H);
 
     /* ── star tunnel: gives depth to the flight ── */
-    const STARS = 3500;
+    const STARS = SMALL_SCREEN ? 1000 : 3500;
     const starPos = new Float32Array(STARS * 3);
     const zFar = -(PAGE_COUNT * SPACING + 40);
     for (let i = 0; i < STARS; i++) {
@@ -312,7 +312,7 @@ const FlyScene = forwardRef<FlyHandle, { className?: string }>(function FlyScene
     scene.add(cloud);
 
     /* ── overlay: glowing particles that drift over the active video and part around the pointer ── */
-    const O = 900;
+    const O = SMALL_SCREEN ? 300 : 900;
     const oPos = new Float32Array(O * 3);
     const oVel = new Float32Array(O * 3);
     const oHome = new Float32Array(O * 3);

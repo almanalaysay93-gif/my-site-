@@ -1,7 +1,9 @@
 // Turns text or an image into particle targets for the stage.
 // World units: screen height = 2, centred on 0. Width = 2 * aspect.
 
-export const PARTICLE_COUNT = 9000;
+// Phones (small or touch screens) get fewer particles: the per-frame math runs on the CPU.
+export const SMALL_SCREEN = typeof window !== 'undefined' && (window.matchMedia('(max-width: 768px), (pointer: coarse)').matches);
+export const PARTICLE_COUNT = SMALL_SCREEN ? 3500 : 9000;
 
 export interface Shape {
   pos: Float32Array;

@@ -4,6 +4,7 @@ import FlyScene, { PAGE_COUNT, type FlyHandle } from '@/components/FlyScene';
 import Deck from '@/components/Deck';
 import ContactBar from '@/components/ContactBar';
 import { BookPage, ContactPage, HeroPage, ProjectCaption } from '@/components/Pages';
+import { SMALL_SCREEN } from '@/lib/sample';
 import { projects } from '@/lib/projects';
 
 // One page per step. Each step flies the 3D camera to that page's panel.
@@ -25,7 +26,7 @@ export default function App() {
 
   return (
     <>
-      <DataRain fullscreen />
+      <DataRain fullscreen count={SMALL_SCREEN ? 500 : undefined} />
       <FlyScene ref={flyRef} className="pointer-events-none fixed inset-0 z-[1]" />
 
       <header className="fixed inset-x-0 top-0 z-50 flex items-center justify-between px-4 py-4 backdrop-blur-md sm:px-8">
