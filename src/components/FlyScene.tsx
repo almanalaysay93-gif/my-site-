@@ -45,7 +45,7 @@ function shapeFor(k: number): Promise<Shape> {
     p = proj.walk
       ? sampleImage(asset(`/walk/${proj.id}.jpg`), SHAPE_LAYOUT, { minLum: 12, zScale: 0 })
       : proj.shot
-        ? sampleImage(proj.shot, SHAPE_LAYOUT, { minLum: 12, zScale: 0 })
+        ? sampleImage(asset(proj.shot), SHAPE_LAYOUT, { minLum: 12, zScale: 0 })
         : Promise.resolve(sampleText(proj.title, SHAPE_LAYOUT));
   } else {
     p = Promise.resolve(sampleText(k === N + 1 ? 'ALAi' : 'BOOK', SHAPE_LAYOUT));
