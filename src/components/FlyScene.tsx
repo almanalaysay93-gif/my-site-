@@ -253,12 +253,39 @@ const FlyScene = forwardRef<FlyHandle, { className?: string }>(function FlyScene
       panels.push({ mesh, mat, glowMat, edgeMat, poster, walk: p.walk, src: asset(`/walk/${p.id}.mp4`), video: null, vtex: null });
     });
 
+    // Every walkthrough is downloaded on open, one at a time in page order, and kept in memory as a blob.
+    // A video then plays from the phone the moment its page opens, with no network wait (works on iOS too).
+    const blobUrls = new Map<number, string>();
+    let loaderStopped = false;
+    const loadAllVideos = async () => {
+      for (let k = 1; k < panels.length; k++) {
+        const p = panels[k];
+        if (loaderStopped) return;
+        if (!p || !p.walk) continue;
+        try {
+          const res = await fetch(p.src);
+          if (!res.ok) continue;
+          const url = URL.createObjectURL(await res.blob());
+          if (loaderStopped) {
+            URL.revokeObjectURL(url);
+            return;
+          }
+          blobUrls.set(k, url);
+          // A player made before its download finished switches to the local copy while it is off screen.
+          if (p.video && p.video.paused && k !== active) p.video.src = url;
+        } catch {
+          // Network error: this video falls back to streaming when its page opens.
+        }
+      }
+    };
+    loadAllVideos();
+
     const ensureVideo = (k: number): HTMLVideoElement | null => {
       const p = panels[k];
       if (!p || !p.walk) return null;
       if (!p.video) {
         const v = document.createElement('video');
-        v.src = p.src;
+        v.src = blobUrls.get(k) ?? p.src;
         v.muted = true;
         v.loop = true;
         v.playsInline = true;
@@ -630,9 +657,7 @@ const FlyScene = forwardRef<FlyHandle, { className?: string }>(function FlyScene
       shapeFor(0).then((shape) => {
         if (active === 0) morphTo(shape, heroCentre(), 0.6, heroScale());
       });
-      // After the intro: start loading the first walkthrough in its own player (one download, ready on the first swipe),
-      // then prepare the other page images for the scroll-out effect.
-      ensureVideo(1);
+      // After the intro: prepare the other page images for the scroll-out effect.
       for (let k = 0; k < PAGE_COUNT; k++) shapeFor(k).catch(() => undefined);
     }, 2200);
 
@@ -779,6 +804,8 @@ const FlyScene = forwardRef<FlyHandle, { className?: string }>(function FlyScene
     return () => {
       cancelAnimationFrame(raf);
       window.clearTimeout(introTimer);
+      loaderStopped = true;
+      blobUrls.forEach((u) => URL.revokeObjectURL(u));
       window.removeEventListener('pointermove', onPointer);
       window.removeEventListener('touchstart', onTouch);
       window.removeEventListener('touchmove', onTouch);
