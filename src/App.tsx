@@ -18,12 +18,12 @@ export default function App() {
     if (progressRef.current) progressRef.current.style.transform = `scaleX(${i / (PAGE_COUNT - 1)})`;
   };
 
-  // On fast connections, fetch the next walkthroughs into the cache while the visitor is still on the hero.
+  // On fast connections, fetch the first walkthrough while the visitor is on the hero. Only one, so it never competes with the video being watched.
   useEffect(() => {
     const conn = (navigator as Navigator & { connection?: { effectiveType?: string; saveData?: boolean } }).connection;
     if (conn?.saveData || (conn?.effectiveType && conn.effectiveType !== '4g')) return;
     const t = window.setTimeout(() => {
-      projects.filter((p) => p.walk).slice(0, 3).forEach((p) => {
+      projects.filter((p) => p.walk).slice(0, 1).forEach((p) => {
         fetch(asset(`/walk/${p.id}.mp4`)).then((r) => r.blob()).catch(() => undefined);
       });
     }, 4000);
