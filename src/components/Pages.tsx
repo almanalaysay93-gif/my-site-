@@ -82,7 +82,7 @@ const links = [
 
 export function ContactPage() {
   return (
-    <div className="mx-4 w-full max-w-4xl rounded-3xl border border-white/10 bg-[#05070d]/85 p-6 shadow-2xl backdrop-blur-xl sm:p-10">
+    <div className="mx-4 w-full max-w-4xl rounded-3xl border border-white/10 bg-[#05070d]/35 p-6 shadow-2xl backdrop-blur-md sm:p-10">
       <h2 {...anim(0)} className="mb-8 text-center font-display text-5xl text-[#ece7dd] sm:text-6xl">Reach me</h2>
       <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
         {links.map((l, n) => (
