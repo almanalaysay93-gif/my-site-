@@ -1,0 +1,44 @@
+import { useRef } from 'react';
+import DataRain from '@/components/ui/data-rain';
+import FlyScene, { PAGE_COUNT, type FlyHandle } from '@/components/FlyScene';
+import Deck from '@/components/Deck';
+import ContactBar from '@/components/ContactBar';
+import { BookPage, ContactPage, HeroPage, ProjectCaption } from '@/components/Pages';
+import { projects } from '@/lib/projects';
+
+// One page per step. Each step flies the 3D camera to that page's panel.
+export default function App() {
+  const flyRef = useRef<FlyHandle>(null);
+  const progressRef = useRef<HTMLDivElement | null>(null);
+
+  const onIndex = (i: number) => {
+    flyRef.current?.flyTo(i);
+    if (progressRef.current) progressRef.current.style.transform = `scaleX(${i / (PAGE_COUNT - 1)})`;
+  };
+
+  const pages = [
+    <HeroPage key="hero" />,
+    ...projects.map((p) => <ProjectCaption key={p.id} project={p} />),
+    <ContactPage key="contact" />,
+    <BookPage key="book" />,
+  ];
+
+  return (
+    <>
+      <DataRain fullscreen />
+      <FlyScene ref={flyRef} className="pointer-events-none fixed inset-0 z-[1]" />
+
+      <header className="fixed inset-x-0 top-0 z-50 flex items-center justify-between px-4 py-4 backdrop-blur-md sm:px-8">
+        <span className="font-display text-2xl text-[#ece7dd]">AL<span className="text-[#8fdcff]">.</span></span>
+      </header>
+      <div
+        ref={progressRef}
+        className="fixed inset-x-0 top-0 z-50 h-[3px] origin-left bg-[#8fdcff]"
+        style={{ transform: 'scaleX(0)' }}
+      />
+
+      <Deck pages={pages} onIndex={onIndex} />
+      <ContactBar />
+    </>
+  );
+}
